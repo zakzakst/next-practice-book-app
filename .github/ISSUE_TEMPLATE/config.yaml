@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: リンクを追加できる
+    url: https://github.com/zakzakst/next-practice-book-app
+    about: 問い合わせ先やFAQのリンクを記載しておくと便利
