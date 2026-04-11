@@ -1,0 +1,49 @@
+name: STORYチケット起票
+description: STORYチケットはこちらのテンプレートに沿って起票してください
+title: "[STORY]: "
+labels: ["ticket", "story"]
+projects: ["book-app"]
+assignees:
+  - zakzakst
+type: story
+body:
+  - type: markdown
+    attributes:
+      value: 参考リンク： https://docs.github.com/ja/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository#creating-issue-forms
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: さらに詳しい情報が必要な場合、どのように連絡を取ればよいでしょうか？
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: user-story
+    attributes:
+      label: ユーザーストーリー
+      description: 「ペルソナは○○したい、なぜなら△△だから」の形式で記載してください
+      placeholder: 管理者はユーザー登録したい、なぜなら登録ができないユーザーの代わりに作業することで離脱をふせげるから
+    validations:
+      required: true
+  - type: textarea
+    id: requirement
+    attributes:
+      label: 要件
+      description: このタスクで実装される機能要件を記載してください
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: 受け入れ条件
+      description: このタスクの受け入れ条件を記載してください
+    validations:
+      required: true
+  - type: textarea
+    id: task-checklist
+    attributes:
+      label: 作業チェックリスト
+      description: このタスクの作業チェックリストを記載してください
+    validations:
+      required: false
