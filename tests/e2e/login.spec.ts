@@ -1,4 +1,5 @@
 import { users } from "@/dummy-db/user";
+import { API_MOCK_DEFAULT_DELAY, apiDelay } from "@/lib/api";
 import { expect, test } from "@playwright/test";
 
 test("ログイン成功したらトップページに遷移する", async ({ page }) => {
@@ -7,9 +8,16 @@ test("ログイン成功したらトップページに遷移する", async ({ pa
   const passwordInput = page.getByRole("textbox", { name: "パスワード" });
   const submitButton = page.getByRole("button", { name: "ログイン" });
 
-  await emailInput.fill(users[0].email);
-  await passwordInput.fill(users[0].password);
+  // TODO: テンプレートのほうにも反映
+  // NOTE: 基本的には「fill」を利用したほうがいいとのことだが、バリデーションが通らなかったので、「pressSequentially」を利用
+  // https://playwright.dev/docs/input#type-characters
+  await emailInput.pressSequentially(users[0].email);
+  await passwordInput.pressSequentially(users[0].password);
+  // await emailInput.fill(users[0].email);
+  // await passwordInput.fill(users[0].password);
+
   await submitButton.click();
+  await apiDelay(API_MOCK_DEFAULT_DELAY + 1000);
 
   await expect(page).toHaveURL("http://localhost:3000");
 });
