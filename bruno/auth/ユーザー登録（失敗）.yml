@@ -1,0 +1,22 @@
+info:
+  name: ユーザー登録（失敗）
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: http://localhost:3000/api/auth/register
+  body:
+    type: json
+    data: |-
+      {
+        "email": "taro@example.com",
+        "password": "password123"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
