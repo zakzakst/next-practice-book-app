@@ -1,0 +1,19 @@
+info:
+  name: 書籍一覧取得（キーワード絞り込み）
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: http://localhost:3000/api/books?q=夜
+  params:
+    - name: q
+      value: 夜
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

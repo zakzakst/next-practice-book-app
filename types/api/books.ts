@@ -14,8 +14,8 @@ export type CreateBookResponse = Book;
 
 // FindAll
 export type FindAllBooksParams = {
-  keyword?: string;
-  page?: string;
+  q?: string;
+  page?: number;
 };
 
 export type FindAllBooksResponse = {
