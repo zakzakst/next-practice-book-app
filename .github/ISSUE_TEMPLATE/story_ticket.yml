@@ -1,0 +1,33 @@
+name: STORYチケット起票
+description: STORYチケットはこちらのテンプレートに沿って起票してください
+labels:
+  - Story
+body:
+  - type: textarea
+    attributes:
+      label: ユーザーストーリー
+      description: 「ペルソナは○○したい、なぜなら△△だから」の形式で記載してください
+      placeholder: 例）管理者はユーザー登録したい、なぜなら登録ができないユーザーの代わりに作業することで離脱をふせげるから
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 要件
+      description: このタスクで実装される機能要件を記載してください
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 受け入れ条件
+      description: このタスクの受け入れ条件を記載してください
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 作業チェックリスト
+      description: このタスクの作業チェックリストを記載してください
+    validations:
+      required: false
