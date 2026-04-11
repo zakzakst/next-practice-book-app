@@ -1,0 +1,12 @@
+name: タスクチェックリスト
+description: SUB ISSUEなどでタスクを分割する際に利用してください
+labels:
+  - Story
+  - Task Check List
+body:
+  - type: textarea
+    attributes:
+      label: 作業チェックリスト
+      description: このタスクの作業チェックリストを記載してください
+    validations:
+      required: true
