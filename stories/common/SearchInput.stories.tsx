@@ -6,9 +6,23 @@ const meta = {
   title: "Common/SearchInput",
   component: SearchInput,
   tags: ["autodocs", "experimental"],
+  args: {
+    onSubmit: fn(),
+  },
 } satisfies Meta<typeof SearchInput>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    value: "入力テキスト",
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    value: "入力テキスト",
+    disabled: true,
+  },
+};
