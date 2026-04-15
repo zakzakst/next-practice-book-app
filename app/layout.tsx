@@ -18,7 +18,7 @@ const Layout = ({
 }>) => {
   return (
     <html lang="ja" className="h-full antialiased">
-      <body className="grid min-h-full grid-rows-[min-content_1fr] bg-gray-100">
+      <body className="grid min-h-full grid-rows-[min-content_1fr]">
         <MSWProvider>
           <AuthProvider>
             <Navbar className="sticky top-0 z-30" />

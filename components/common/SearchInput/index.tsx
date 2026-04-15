@@ -35,6 +35,7 @@ export const SearchInput = ({ value, disabled, onSubmit }: Props) => {
 
   const handleClear = useCallback(() => {
     setInputText("");
+    // TODO: 考える。クリアボタンを押した時に関数が発火しないパターンのほうが良いか？（入力欄を空にして再度文字を入力する使い方のほうが多い気がする）
     onSubmit("");
   }, [setInputText, onSubmit]);
 
