@@ -7,13 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 
 type Props = {
-  value: string;
+  value?: string;
   disabled?: boolean;
   onSubmit: (text: string) => void;
 };
 
 export const SearchInput = ({ value, disabled, onSubmit }: Props) => {
-  const [inputText, setInputText] = useState<string>(value);
+  const [inputText, setInputText] = useState<string>(value || "");
 
   const canSubmit = useMemo<boolean>(() => {
     if (disabled) return false;
@@ -35,9 +35,7 @@ export const SearchInput = ({ value, disabled, onSubmit }: Props) => {
 
   const handleClear = useCallback(() => {
     setInputText("");
-    // TODO: 考える。クリアボタンを押した時に関数が発火しないパターンのほうが良いか？（入力欄を空にして再度文字を入力する使い方のほうが多い気がする）
-    onSubmit("");
-  }, [setInputText, onSubmit]);
+  }, [setInputText]);
 
   return (
     <div className="grid grid-cols-[1fr_max-content]">
@@ -45,8 +43,10 @@ export const SearchInput = ({ value, disabled, onSubmit }: Props) => {
         <Input
           className="h-full rounded-r-none pr-9"
           onChange={handleChangeInput}
-          defaultValue={value}
+          // defaultValue={value}
+          value={inputText}
           disabled={disabled}
+          data-testid="search-input-input"
         />
         {!!inputText.length && !disabled && (
           <Button
@@ -55,6 +55,7 @@ export const SearchInput = ({ value, disabled, onSubmit }: Props) => {
             className="absolute top-0 right-1 bottom-0 my-auto"
             aria-label="クリア"
             onClick={handleClear}
+            data-testid="search-input-clear-button"
           >
             <X />
           </Button>
@@ -66,6 +67,7 @@ export const SearchInput = ({ value, disabled, onSubmit }: Props) => {
         aria-label="検索"
         onClick={handleSubmit}
         disabled={!canSubmit}
+        data-testid="search-input-submit-button"
       >
         <Search />
       </Button>

@@ -40,7 +40,7 @@ const Page = () => {
   return (
     <div className="grid grid-cols-1 gap-4">
       {/* TODO: 検索フォームの挙動が使いにくい。仕様を整理して修正する */}
-      <SearchInput value="" onSubmit={handleSubmitSearchInput} />
+      <SearchInput value={params.q} onSubmit={handleSubmitSearchInput} />
       <BooksList items={data?.items || []} />
       <ButtonPagination
         total={data?.total}
