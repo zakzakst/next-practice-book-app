@@ -30,7 +30,7 @@ export const BooksList = ({ items }: Props) => {
                     className="aspect-video h-full w-full object-cover"
                     src={
                       item?.thumbnail ||
-                      "https://placehold.jp/150x150.png?text=No+Image"
+                      "https://placehold.jp/800x450.png?text=No+Image"
                     }
                     alt={
                       item?.thumbnail

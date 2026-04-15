@@ -38,7 +38,7 @@ describe("BooksList", () => {
     expect(bookItems[0].querySelector("a")).toHaveAttribute("href", "/books/1");
     expect(bookItems[0].querySelector("img")).toHaveAttribute(
       "src",
-      "https://placehold.jp/150x150.png?text=No+Image",
+      "https://placehold.jp/800x450.png?text=No+Image",
     );
     expect(bookItems[0].querySelector("img")).toHaveAttribute(
       "alt",

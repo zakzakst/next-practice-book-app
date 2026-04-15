@@ -1,6 +1,6 @@
 import { BookDetail } from "@/components/features/books/BookDetail";
+import { books } from "@/dummy-db/book";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { fn } from "storybook/test";
 
 const meta = {
   title: "Features/Books/BookDetail",
@@ -11,4 +11,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    book: books[1],
+  },
+};
+
+export const NoImage: Story = {
+  args: {
+    book: books[0],
+  },
+};
