@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { /* expect, */ test } from "@playwright/test";
 
 test("トップページの挙動", () => {
   test.fixme("アクセスした時、キーワード絞り込みされていない書籍一覧の1ページ目が表示される", async () => {});
