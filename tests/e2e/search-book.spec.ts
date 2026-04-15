@@ -51,9 +51,37 @@ test("書籍一覧でページ移動して書籍を探せる", async ({ page }) 
   await expect(page.getByText("アヒルと鴨のコインロッカー")).toBeVisible();
 });
 
-test.fixme("書籍一覧でキーワード絞り込みして書籍を探せる", async () => {
-  // トップページで一覧表示
-  // キーワード絞り込み
-  // キーワード絞り込み変更
-  // キーワード絞り込みクリア
+test("書籍一覧でキーワード絞り込みして書籍を探せる", async ({ page }) => {
+  // Arrange
+  await page.goto("http://localhost:3000");
+  const input = await page.locator('[data-testid="search-input-input"]');
+  const submitButton = await page.locator(
+    '[data-testid="search-input-submit-button"]',
+  );
+
+  // ===== キーワード絞り込みの挙動確認 =====
+  // Act
+  await input.fill("夜");
+  await submitButton.click();
+
+  // Assert
+  await expect(page.getByText("夜のピクニック")).toBeVisible();
+
+  // ===== キーワード絞り込み変更の挙動確認 =====
+  // Act
+  await input.fill("社会");
+  await submitButton.click();
+
+  // Assert
+  await expect(page.getByText("コンビニ人間")).toBeVisible();
+
+  // ===== キーワード絞り込みクリアの挙動確認 =====
+  // Act
+  const clearButton = await page.waitForSelector(
+    '[data-testid="search-input-clear-button"]',
+  );
+  await clearButton.click();
+
+  // Assert
+  await expect(input).toHaveAttribute("value", "");
 });

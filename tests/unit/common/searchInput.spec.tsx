@@ -87,17 +87,17 @@ describe("SearchInput", () => {
     expect(submitMock).toHaveBeenCalledWith("入力テキスト");
   });
 
-  test("「クリア」ボタンをクリックした時、空の文字列を引数として関数が発火する", async () => {
+  test("「クリア」ボタンをクリックした時、入力欄が空になる", async () => {
     // Arrange
-    const submitMock = vi.fn();
-    render(<SearchInput value="入力テキスト" onSubmit={submitMock} />);
+    render(<SearchInput value="入力テキスト" onSubmit={() => {}} />);
     const clearButton = screen.getByRole("button", { name: "クリア" });
+    const input = screen.getByRole("textbox");
 
     // Act
     await userEvent.click(clearButton);
 
     // Assert
-    expect(submitMock).toHaveBeenCalledWith("");
+    expect(input).toHaveAttribute("value", "");
   });
 
   test("disabledがtrueの場合、入力欄・「検索」ボタンともに無効になる", () => {
