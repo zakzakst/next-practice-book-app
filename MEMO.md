@@ -23,3 +23,4 @@
 ### 参考
 
 - https://github.com/microsoft/PowerToys/tree/main/.github/ISSUE_TEMPLATE
+- https://qiita.com/ko-he-8/items/85116e1d99ed4b176657

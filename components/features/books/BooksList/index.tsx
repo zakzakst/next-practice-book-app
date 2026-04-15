@@ -22,7 +22,11 @@ export const BooksList = ({ items }: Props) => {
     <ul className="grid grid-cols-3 gap-4">
       {items.map((item) => (
         <li key={item.id}>
-          <Link href={`/books/${item.id}`} className="block h-full">
+          <Link
+            href={`/books/${item.id}`}
+            className="block h-full"
+            data-testid={`books-list-link-${item.id}`}
+          >
             <article className="h-full">
               <Card className="h-full pt-0 duration-300 hover:shadow-lg">
                 <div>
