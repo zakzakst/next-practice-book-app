@@ -3,6 +3,31 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 
 describe("ButtonPagination", () => {
+  test.each([
+    [1, undefined, [1]],
+    [91, undefined, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
+    [100, undefined, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
+    [1, 20, [1]],
+    [91, 20, [1, 2, 3, 4, 5]],
+    [100, 20, [1, 2, 3, 4, 5]],
+  ])("totalとlimitの数に応じたボタンが表示される", (total, limit, nums) => {
+    // Arrange
+    render(
+      <ButtonPagination
+        total={total}
+        limit={limit}
+        current={1}
+        onMovePage={() => {}}
+      />,
+    );
+
+    // Assert
+    nums.forEach((num) => {
+      const button = screen.getByTestId(`button-pagination-button-${num}`);
+      expect(button).toBeInTheDocument();
+    });
+  });
+
   test("ボタンをクリックした際、対象のページを引数として関数が発火する", async () => {
     const handleMovePage = vi.fn();
     render(

@@ -21,14 +21,14 @@ const ButtonPaginationButton = ({ isActive, ...rest }: ButtonProps) => {
 
 export type Props = {
   total?: number;
-  itemsPerPage?: number;
+  limit?: number;
   current?: number;
   onMovePage: (page: number) => void;
 };
 
 export const ButtonPagination = ({
   total,
-  itemsPerPage = 10,
+  limit = 10,
   current,
   onMovePage,
 }: Props) => {
@@ -39,16 +39,16 @@ export const ButtonPagination = ({
 
   const isShowNext = useMemo<boolean>(() => {
     if (!total || !current) return false;
-    return current < Math.ceil(total / itemsPerPage);
-  }, [current, total, itemsPerPage]);
+    return current < Math.ceil(total / limit);
+  }, [current, total, limit]);
 
   const pages = useMemo<number[]>(() => {
     if (!total) return [];
-    const pagesNum = Math.ceil(total / itemsPerPage);
+    const pagesNum = Math.ceil(total / limit);
     return Array(pagesNum)
       .fill(null)
       .map((_, index) => index + 1);
-  }, [total, itemsPerPage]);
+  }, [total, limit]);
 
   const handleClickButton = (to: number | "prev" | "next") => {
     if (!current || to === current) return;
