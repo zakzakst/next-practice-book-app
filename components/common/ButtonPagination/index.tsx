@@ -67,7 +67,7 @@ export const ButtonPagination = ({
   if (!total || !current) return null;
 
   return (
-    <Pagination>
+    <Pagination data-testid="button-pagination">
       <PaginationContent>
         {isShowPrev && (
           <PaginationItem>
