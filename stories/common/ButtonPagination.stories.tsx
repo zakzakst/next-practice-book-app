@@ -5,7 +5,7 @@ import { fn } from "storybook/test";
 const meta = {
   title: "Common/ButtonPagination",
   component: ButtonPagination,
-  tags: ["autodocs", "experimental"],
+  tags: ["autodocs"],
   args: {
     onMovePage: fn(),
   },

@@ -18,6 +18,7 @@ describe("LoginForm", () => {
     ["valid.address@mail.com", "validPassword", true],
     ["invalid.address", "short", false],
   ])("バリデーションが正しく挙動する", async (email, password, result) => {
+    // Arrange
     const meMutateMock = vi.fn();
     const triggerMock = vi.fn(async () => ({ ok: true }));
     const toastMock = vi.fn();
@@ -58,12 +59,15 @@ describe("LoginForm", () => {
     // });
     // await fireEvent.click(submitButton);
 
+    // Assert
     expect(submitButton).toHaveAttribute("disabled");
 
+    // Act
     await userEvent.type(emailInput, email);
     await userEvent.type(passwordInput, password);
     await userEvent.click(submitButton);
 
+    // Assert
     if (result) {
       expect(submitButton).not.toHaveAttribute("disabled");
       expect(triggerMock).toHaveBeenCalled();
