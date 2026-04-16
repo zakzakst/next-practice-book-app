@@ -1,0 +1,15 @@
+info:
+  name: 書籍お気に入り登録（登録済エラー）
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:3000/api/books/1/favorite
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
