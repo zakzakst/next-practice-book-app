@@ -1,0 +1,23 @@
+info:
+  name: 書籍更新（エラー）
+  type: http
+  seq: 7
+
+http:
+  method: PUT
+  url: http://localhost:3000/api/books/404
+  body:
+    type: json
+    data: |-
+      {
+        "title": "更新タイトル",
+        "author": "更新著者名",
+        "description": "更新概要"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
