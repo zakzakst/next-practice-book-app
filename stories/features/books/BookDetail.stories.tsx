@@ -5,7 +5,8 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 const meta = {
   title: "Features/Books/BookDetail",
   component: BookDetail,
-  tags: ["autodocs", "experimental"],
+  // TODO: テンプレートのほうにも反映（experimental削除）
+  tags: ["autodocs"],
 } satisfies Meta<typeof BookDetail>;
 
 export default meta;

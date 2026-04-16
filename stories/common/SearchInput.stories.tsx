@@ -5,7 +5,7 @@ import { fn } from "storybook/test";
 const meta = {
   title: "Common/SearchInput",
   component: SearchInput,
-  tags: ["autodocs", "experimental"],
+  tags: ["autodocs"],
   args: {
     onSubmit: fn(),
   },
