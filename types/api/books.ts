@@ -38,13 +38,13 @@ export type UpdateBookRequest = {
 
 export type UpdateBookResponse = Book;
 
-// FindByUserLike
-export type FindAllBooksByUserLikeRequest = {
+// FindByUserFavorite
+export type FindAllBooksByUserFavoriteRequest = {
   userId: User["id"];
   page?: string;
 };
 
-export type FindAllBooksByUserLikeResponse = {
+export type FindAllBooksByUserFavoriteResponse = {
   total: number;
   page: number;
   limit: number;

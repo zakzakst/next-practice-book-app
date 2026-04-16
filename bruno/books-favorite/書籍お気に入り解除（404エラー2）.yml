@@ -1,0 +1,15 @@
+info:
+  name: 書籍お気に入り解除（404エラー2）
+  type: http
+  seq: 6
+
+http:
+  method: DELETE
+  url: http://localhost:3000/api/books/10/favorite
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
