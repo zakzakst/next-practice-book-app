@@ -6,7 +6,7 @@ export const users: User[] = [
     name: "Taro Yamada",
     email: "taro@example.com",
     password: "password123",
-    roles: ["user"],
+    roles: ["user", "admin"],
     createdAt: "2026-04-01T08:00:00.000Z",
     updatedAt: "2026-04-01T08:00:00.000Z",
   },
