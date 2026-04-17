@@ -6,7 +6,7 @@ import { users } from "@/dummy-db/user";
 import { apiDelay } from "@/lib/api";
 import { getJwtPayload } from "@/lib/jwt";
 import {
-  FindAllReviewsResponse,
+  FindAllReviewsByBookIdResponse,
   FrontReview,
   UpdateReviewRequest,
   UpdateReviewResponse,
@@ -20,7 +20,7 @@ type Error = {
 export const GET = async (
   _request: NextRequest,
   context: RouteContext<"/api/books/[id]/reviews">,
-): Promise<NextResponse<FindAllReviewsResponse | Error>> => {
+): Promise<NextResponse<FindAllReviewsByBookIdResponse | Error>> => {
   await apiDelay();
 
   try {
