@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { books } from "@/dummy-db/book";
+import { favorites } from "@/dummy-db/favorite";
 import { users } from "@/dummy-db/user";
 import { apiDelay } from "@/lib/api";
 import { getJwtPayload } from "@/lib/jwt";
@@ -33,7 +34,21 @@ export const GET = async (
       );
     }
 
-    return NextResponse.json(book);
+    // 書籍情報をフロントエンド用に加工
+    const jwtPayload = await getJwtPayload();
+    const user = users.find((u) => u.id === jwtPayload?.id);
+    const bookFavorites = favorites.filter((f) => f.bookId === book.id);
+    const userBookFavorite = favorites.find(
+      (f) => f.bookId === book.id && f.userId === user?.id,
+    );
+
+    return NextResponse.json({
+      ...book,
+      favorite: {
+        count: bookFavorites.length,
+        state: userBookFavorite ? true : false,
+      },
+    });
   } catch {
     return NextResponse.json(
       { error: "サーバーのエラーが発生しました" },
@@ -79,7 +94,19 @@ export const PUT = async (
     const index = books.findIndex((b) => b === book);
     books[index] = updatedBook;
 
-    return NextResponse.json(updatedBook);
+    // 書籍情報をフロントエンド用に加工
+    const bookFavorites = favorites.filter((f) => f.bookId === book.id);
+    const userBookFavorite = favorites.find(
+      (f) => f.bookId === book.id && f.userId === user?.id,
+    );
+
+    return NextResponse.json({
+      ...updatedBook,
+      favorite: {
+        count: bookFavorites.length,
+        state: userBookFavorite ? true : false,
+      },
+    });
   } catch {
     return NextResponse.json(
       { error: "サーバーのエラーが発生しました" },

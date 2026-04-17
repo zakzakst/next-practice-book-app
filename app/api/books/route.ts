@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { books } from "@/dummy-db/book";
+import { favorites } from "@/dummy-db/favorite";
+import { users } from "@/dummy-db/user";
 import { apiDelay } from "@/lib/api";
+import { getJwtPayload } from "@/lib/jwt";
+import { FrontBook } from "@/types/api/books";
 import { FindAllBooksParams, FindAllBooksResponse } from "@/types/api/books";
 import lodash from "lodash";
 
@@ -35,12 +39,28 @@ export const GET = async (
     // 対象ページの範囲を抽出
     const startNum = (formattedPage - 1) * PAGE_LIMIT;
     const limitedBooks = filteredBooks.slice(startNum, startNum + PAGE_LIMIT);
+    // 書籍情報をフロントエンド用に加工
+    const jwtPayload = await getJwtPayload();
+    const user = users.find((u) => u.id === jwtPayload?.id);
+    const items: FrontBook[] = limitedBooks.map((b) => {
+      const bookFavorites = favorites.filter((f) => f.bookId === b.id);
+      const userBookFavorite = favorites.find(
+        (f) => f.bookId === b.id && f.userId === user?.id,
+      );
+      return {
+        ...b,
+        favorite: {
+          count: bookFavorites.length,
+          state: userBookFavorite ? true : false,
+        },
+      };
+    });
 
     return NextResponse.json({
       total: filteredBooks.length,
       page: formattedPage,
       limit: PAGE_LIMIT,
-      items: limitedBooks,
+      items: items,
     });
   } catch {
     return NextResponse.json(

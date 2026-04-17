@@ -28,7 +28,7 @@ export const PageContent = ({ id }: Props) => {
           </Button>
         </div>
       )}
-      <BookDetail book={data} />
+      <BookDetail book={data} onUpdateFavorite={() => {}} />
     </div>
   );
 };

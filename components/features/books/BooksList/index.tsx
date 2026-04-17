@@ -1,21 +1,37 @@
 "use client";
 
+import { MouseEvent, useCallback } from "react";
+
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  // CardFooter,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Book } from "@/types/domain/book";
+import { useAuth } from "@/contexts/AuthContext";
+import { FrontBook } from "@/types/api/books";
+import { Star } from "lucide-react";
 
 type Props = {
-  items: Book[];
+  items: FrontBook[];
+  onUpdateFavorite: (item: FrontBook) => void;
 };
 
-export const BooksList = ({ items }: Props) => {
+export const BooksList = ({ items, onUpdateFavorite }: Props) => {
+  const { me } = useAuth();
+
+  const handleUpdateFavorite = useCallback(
+    (e: MouseEvent<HTMLButtonElement>, item: FrontBook) => {
+      e.preventDefault();
+      onUpdateFavorite(item);
+    },
+    [onUpdateFavorite],
+  );
+
   if (!items.length) return <p className="text-center">書籍が見つかりません</p>;
 
   return (
@@ -50,9 +66,21 @@ export const BooksList = ({ items }: Props) => {
                   <p>{item.author}</p>
                 </CardContent>
                 {/* NOTE: 後で評価情報を足した時にここにお気に入りボタンと評価数とレビュー数を表示する */}
-                {/* <CardFooter className="mt-auto">
-                  <p></p>
-                </CardFooter> */}
+                <CardFooter className="mt-auto grid grid-cols-[1fr_max-content] items-center gap-2">
+                  <div>
+                    {me && (
+                      <Button onClick={(e) => handleUpdateFavorite(e, item)}>
+                        {item.favorite.state
+                          ? "お気に入り解除"
+                          : "お気に入り登録"}
+                      </Button>
+                    )}
+                  </div>
+                  <p className="flex items-center gap-1">
+                    <Star aria-label="お気に入り登録した人数" />
+                    {item.favorite.count}
+                  </p>
+                </CardFooter>
               </Card>
             </article>
           </Link>

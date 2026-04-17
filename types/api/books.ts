@@ -1,6 +1,12 @@
 // TODO: データ取得のルールの考え方がまとまらない。。一旦POSTで取得・条件はすべてリクエストに含める方針でやってみる
 import { Book } from "@/types/domain/book";
-import { User } from "@/types/domain/user";
+
+export type FrontBook = Book & {
+  favorite: {
+    count: number;
+    state: boolean;
+  };
+};
 
 // Create
 export type CreateBookRequest = {
@@ -10,7 +16,7 @@ export type CreateBookRequest = {
   thumbnail?: string;
 };
 
-export type CreateBookResponse = Book;
+export type CreateBookResponse = FrontBook;
 
 // FindAll
 export type FindAllBooksParams = {
@@ -22,11 +28,11 @@ export type FindAllBooksResponse = {
   total: number;
   page: number;
   limit: number;
-  items: Book[];
+  items: FrontBook[];
 };
 
 // FindOne
-export type FindOneBookResponse = Book;
+export type FindOneBookResponse = FrontBook;
 
 // Update
 export type UpdateBookRequest = {
@@ -36,11 +42,10 @@ export type UpdateBookRequest = {
   thumbnail?: string;
 };
 
-export type UpdateBookResponse = Book;
+export type UpdateBookResponse = FrontBook;
 
 // FindByUserFavorite
 export type FindAllBooksByUserFavoriteRequest = {
-  userId: User["id"];
   page?: string;
 };
 
@@ -48,5 +53,5 @@ export type FindAllBooksByUserFavoriteResponse = {
   total: number;
   page: number;
   limit: number;
-  items: Book[];
+  items: FrontBook[];
 };
