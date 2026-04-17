@@ -1,0 +1,22 @@
+info:
+  name: レビュー更新
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: http://localhost:3000/api/reviews/1
+  body:
+    type: json
+    data: |-
+      {
+        "comment": "更新コメント",
+        "rating": 2.5
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
