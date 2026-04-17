@@ -11,7 +11,7 @@ import {
   UpdateBookRequest,
   UpdateBookResponse,
 } from "@/types/api/books";
-import { Book } from "@/types/domain/book";
+import { FrontBook } from "@/types/api/books";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
@@ -24,7 +24,7 @@ export const useFindAllBooks = (params?: FindAllBooksParams) => {
 };
 
 // FindOne
-export const useFindOneBook = (id: Book["id"]) => {
+export const useFindOneBook = (id: FrontBook["id"]) => {
   return useSWR(
     getApiPath(`/books/${id}`),
     findOneFetcher<FindOneBookResponse>,
@@ -32,7 +32,7 @@ export const useFindOneBook = (id: Book["id"]) => {
 };
 
 // Update
-export const useUpdateBook = (id: Book["id"]) => {
+export const useUpdateBook = (id: FrontBook["id"]) => {
   return useSWRMutation(
     getApiPath(`/books/${id}`),
     updateFetcher<UpdateBookRequest, UpdateBookResponse>,
