@@ -15,19 +15,15 @@ export type CreateReviewRequest = {
 export type CreateReviewResponse = FrontReview;
 
 // FindAll
-// NOTE: ログイン情報とAPIパスから判断する実装にしたので不要
 // export type FindAllReviewsParams = {
 //   bookId?: Book["id"];
 //   userId?: User["id"];
 // };
 
-export type FindAllReviewsResponse = {
-  total: number;
-  // 現状全件表示のため不要
-  // page: number;
-  // limit: number;
-  items: FrontReview[];
-};
+// export type FindAllReviewsResponse = {
+//   total: number;
+//   items: FrontReview[];
+// };
 
 // FindOne
 // export type FindOneReviewResponse = Review;
@@ -39,3 +35,9 @@ export type UpdateReviewRequest = {
 };
 
 export type UpdateReviewResponse = FrontReview;
+
+// FindAllByBookId
+export type FindAllReviewsByBookIdResponse = {
+  total: number;
+  items: FrontReview[];
+};

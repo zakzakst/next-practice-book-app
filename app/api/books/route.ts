@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { books } from "@/dummy-db/book";
 import { favorites } from "@/dummy-db/favorite";
+import { reviews } from "@/dummy-db/review";
 import { users } from "@/dummy-db/user";
 import { apiDelay } from "@/lib/api";
 import { getJwtPayload } from "@/lib/jwt";
@@ -47,11 +48,15 @@ export const GET = async (
       const userBookFavorite = favorites.find(
         (f) => f.bookId === b.id && f.userId === user?.id,
       );
+      const bookReviews = reviews.filter((r) => r.bookId === b.id);
       return {
         ...b,
         favorite: {
           count: bookFavorites.length,
           state: userBookFavorite ? true : false,
+        },
+        reviews: {
+          count: bookReviews.length,
         },
       };
     });
