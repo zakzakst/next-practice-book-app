@@ -19,7 +19,7 @@ type Error = {
 // お気に入り登録
 export const POST = async (
   _request: NextRequest,
-  context: RouteContext<"/api/books/[id]">,
+  context: RouteContext<"/api/books/[id]/favorite">,
 ): Promise<NextResponse<PostFavoriteResponse | Error>> => {
   await apiDelay();
 
@@ -80,7 +80,7 @@ export const POST = async (
 // お気に入り解除
 export const DELETE = async (
   _request: NextRequest,
-  context: RouteContext<"/api/books/[id]">,
+  context: RouteContext<"/api/books/[id]/favorite">,
 ): Promise<NextResponse<DeleteFavoriteResponse | Error>> => {
   await apiDelay();
 
