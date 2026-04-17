@@ -22,6 +22,9 @@ const DummyBooks: FrontBook[] = [
       count: 0,
       state: false,
     },
+    reviews: {
+      count: 0,
+    },
   },
   {
     id: 2,
@@ -35,6 +38,9 @@ const DummyBooks: FrontBook[] = [
     favorite: {
       count: 8,
       state: true,
+    },
+    reviews: {
+      count: 6,
     },
   },
 ];
@@ -66,6 +72,9 @@ describe("BooksList", () => {
     );
     expect(screen.getByTestId("book-list-favorite-count-2")).toHaveTextContent(
       "8",
+    );
+    expect(screen.getByTestId("book-list-reviews-count-2")).toHaveTextContent(
+      "6",
     );
 
     // 書影ありの場合の表示を確認

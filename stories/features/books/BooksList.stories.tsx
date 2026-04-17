@@ -11,6 +11,9 @@ const frontBooks = books.map((b) => ({
     count: 0,
     state: false,
   },
+  reviews: {
+    count: 0,
+  },
 }));
 
 const meta = {

@@ -22,6 +22,9 @@ const DummyBooks: FrontBook[] = [
       count: 0,
       state: false,
     },
+    reviews: {
+      count: 0,
+    },
   },
   {
     id: 2,
@@ -35,6 +38,9 @@ const DummyBooks: FrontBook[] = [
     favorite: {
       count: 8,
       state: true,
+    },
+    reviews: {
+      count: 6,
     },
   },
 ];
@@ -66,6 +72,7 @@ describe("BookDetail", () => {
     );
     expect(thumbnail).toHaveAttribute("alt", "コンビニ人間の書影");
     expect(screen.getByText("お気に入り登録した人数：8")).toBeInTheDocument();
+    expect(screen.getByText("レビュー数：6")).toBeInTheDocument();
   });
 
   test("書影なしのデータの場合、書影なしの画像が表示される", () => {
@@ -88,7 +95,7 @@ describe("BookDetail", () => {
     expect(thumbnail).toHaveAttribute("alt", "登録された書影がありません");
   });
 
-  test("未ログインの場合、お気に入りボタンが表示されない", () => {
+  test("未ログインの場合、お気に入りボタンとレビューボタンが表示されない", () => {
     // Arrange
     vi.mocked(useAuth).mockReturnValue({
       me: null,
@@ -99,9 +106,11 @@ describe("BookDetail", () => {
     });
     render(<BookDetail book={DummyBooks[0]} onUpdateFavorite={() => {}} />);
     const favoriteButton = screen.queryByTestId("book-detail-favorite-button");
+    const reviewButton = screen.queryByRole("link", { name: "レビューを書く" });
 
     // Assert
     expect(favoriteButton).not.toBeInTheDocument();
+    expect(reviewButton).not.toBeInTheDocument();
   });
 
   test("お気に入りボタンが正しく挙動する", async () => {
@@ -124,5 +133,21 @@ describe("BookDetail", () => {
 
     // Assert
     expect(updateFavoriteMock).toHaveBeenCalledWith(DummyBooks[0]);
+  });
+
+  test("レビューボタンのリンクが正しく設定される", () => {
+    // Arrange
+    vi.mocked(useAuth).mockReturnValue({
+      me: users[0],
+      isLoading: false,
+      isMutating: false,
+      meMutate: vi.fn(),
+      logout: vi.fn(),
+    });
+    render(<BookDetail book={DummyBooks[0]} onUpdateFavorite={() => {}} />);
+    const reviewButton = screen.getByRole("link", { name: "レビューを書く" });
+
+    // Assert
+    expect(reviewButton).toHaveAttribute("href", "/reviews/create?bookId=1");
   });
 });

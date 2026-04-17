@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { FrontBook } from "@/types/api/books";
-import { Star } from "lucide-react";
+import { MessageSquareText, Star } from "lucide-react";
 
 type Props = {
   items: FrontBook[];
@@ -66,8 +66,7 @@ export const BooksList = ({ items, onUpdateFavorite }: Props) => {
                 <CardContent>
                   <p>{item.author}</p>
                 </CardContent>
-                {/* NOTE: 後で評価情報を足した時にここにお気に入りボタンと評価数とレビュー数を表示する */}
-                <CardFooter className="mt-auto grid grid-cols-[1fr_max-content] items-center gap-2">
+                <CardFooter className="mt-auto grid grid-cols-[1fr_max-content_max-content] items-center gap-2">
                   <div>
                     {me && (
                       <Button
@@ -84,6 +83,12 @@ export const BooksList = ({ items, onUpdateFavorite }: Props) => {
                     <Star aria-label="お気に入り登録した人数" />
                     <span data-testid={`book-list-favorite-count-${item.id}`}>
                       {item.favorite.count}
+                    </span>
+                  </p>
+                  <p className="flex items-center gap-1">
+                    <MessageSquareText aria-label="レビュー数" />
+                    <span data-testid={`book-list-reviews-count-${item.id}`}>
+                      {item.reviews.count}
                     </span>
                   </p>
                 </CardFooter>
