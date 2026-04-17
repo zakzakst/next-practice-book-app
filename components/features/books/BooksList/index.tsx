@@ -57,6 +57,7 @@ export const BooksList = ({ items, onUpdateFavorite }: Props) => {
                         ? `${item.title}の書影`
                         : "登録された書影がありません"
                     }
+                    loading="lazy"
                   />
                 </div>
                 <CardHeader>
@@ -69,7 +70,10 @@ export const BooksList = ({ items, onUpdateFavorite }: Props) => {
                 <CardFooter className="mt-auto grid grid-cols-[1fr_max-content] items-center gap-2">
                   <div>
                     {me && (
-                      <Button onClick={(e) => handleUpdateFavorite(e, item)}>
+                      <Button
+                        onClick={(e) => handleUpdateFavorite(e, item)}
+                        data-testid={`books-list-favorite-button-${item.id}`}
+                      >
                         {item.favorite.state
                           ? "お気に入り解除"
                           : "お気に入り登録"}
@@ -78,7 +82,9 @@ export const BooksList = ({ items, onUpdateFavorite }: Props) => {
                   </div>
                   <p className="flex items-center gap-1">
                     <Star aria-label="お気に入り登録した人数" />
-                    {item.favorite.count}
+                    <span data-testid={`book-list-favorite-count-${item.id}`}>
+                      {item.favorite.count}
+                    </span>
                   </p>
                 </CardFooter>
               </Card>
