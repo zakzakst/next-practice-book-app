@@ -41,6 +41,9 @@ export const Default: Story = {
         count: 0,
         state: false,
       },
+      reviews: {
+        count: 0,
+      },
     },
   },
 };
@@ -52,6 +55,9 @@ export const NoImage: Story = {
       favorite: {
         count: 0,
         state: false,
+      },
+      reviews: {
+        count: 0,
       },
     },
   },
