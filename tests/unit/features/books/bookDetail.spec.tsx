@@ -2,6 +2,7 @@ import { BookDetail } from "@/components/features/books/BookDetail";
 import { useAuth } from "@/contexts/AuthContext";
 import { users } from "@/dummy-db/user";
 import { FrontBook } from "@/types/api/books";
+import { FrontReview } from "@/types/api/reviews";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
@@ -45,6 +46,43 @@ const DummyBooks: FrontBook[] = [
   },
 ];
 
+const DummyReviews: FrontReview[] = [
+  {
+    id: 1,
+    bookId: 1,
+    userId: 1,
+    rating: 5,
+    comment: "とても面白かったです！！",
+    createdAt: "2024-01-15T10:00:00.000Z",
+    updatedAt: "2024-01-15T10:00:00.000Z",
+    user: {
+      id: 1,
+      name: "Taro Yamada",
+      email: "taro@example.com",
+      roles: ["user", "admin"],
+      createdAt: "2026-04-01T08:00:00.000Z",
+      updatedAt: "2026-04-01T08:00:00.000Z",
+    },
+  },
+  {
+    id: 3,
+    bookId: 1,
+    userId: 2,
+    rating: 3,
+    comment: "登場人物に共感できました",
+    createdAt: "2024-10-15T10:00:00.000Z",
+    updatedAt: "2024-10-15T10:00:00.000Z",
+    user: {
+      id: 2,
+      name: "Hanako Suzuki",
+      email: "hanako@example.com",
+      roles: ["user"],
+      createdAt: "2026-04-02T09:30:00.000Z",
+      updatedAt: "2026-04-02T09:30:00.000Z",
+    },
+  },
+];
+
 describe("BookDetail", () => {
   test("渡されたデータに対応した内容が表示される", () => {
     // Arrange
@@ -55,7 +93,14 @@ describe("BookDetail", () => {
       meMutate: vi.fn(),
       logout: vi.fn(),
     });
-    render(<BookDetail book={DummyBooks[1]} onUpdateFavorite={() => {}} />);
+    render(
+      <BookDetail
+        book={DummyBooks[1]}
+        reviews={DummyReviews}
+        onUpdateFavorite={() => {}}
+        onDeleteReview={() => {}}
+      />,
+    );
     const thumbnail = screen.getByRole("img");
 
     // Assert
@@ -73,6 +118,7 @@ describe("BookDetail", () => {
     expect(thumbnail).toHaveAttribute("alt", "コンビニ人間の書影");
     expect(screen.getByText("お気に入り登録した人数：8")).toBeInTheDocument();
     expect(screen.getByText("レビュー数：6")).toBeInTheDocument();
+    expect(screen.getByText("とても面白かったです！！")).toBeInTheDocument();
   });
 
   test("書影なしのデータの場合、書影なしの画像が表示される", () => {
@@ -84,7 +130,14 @@ describe("BookDetail", () => {
       meMutate: vi.fn(),
       logout: vi.fn(),
     });
-    render(<BookDetail book={DummyBooks[0]} onUpdateFavorite={() => {}} />);
+    render(
+      <BookDetail
+        book={DummyBooks[0]}
+        reviews={[]}
+        onUpdateFavorite={() => {}}
+        onDeleteReview={() => {}}
+      />,
+    );
     const thumbnail = screen.getByRole("img");
 
     // Assert
@@ -104,7 +157,14 @@ describe("BookDetail", () => {
       meMutate: vi.fn(),
       logout: vi.fn(),
     });
-    render(<BookDetail book={DummyBooks[0]} onUpdateFavorite={() => {}} />);
+    render(
+      <BookDetail
+        book={DummyBooks[0]}
+        reviews={[]}
+        onUpdateFavorite={() => {}}
+        onDeleteReview={() => {}}
+      />,
+    );
     const favoriteButton = screen.queryByTestId("book-detail-favorite-button");
     const reviewButton = screen.queryByRole("link", { name: "レビューを書く" });
 
@@ -124,7 +184,12 @@ describe("BookDetail", () => {
     });
     const updateFavoriteMock = vi.fn();
     render(
-      <BookDetail book={DummyBooks[0]} onUpdateFavorite={updateFavoriteMock} />,
+      <BookDetail
+        book={DummyBooks[0]}
+        reviews={[]}
+        onUpdateFavorite={updateFavoriteMock}
+        onDeleteReview={() => {}}
+      />,
     );
     const favoriteButton = screen.getByTestId("book-detail-favorite-button");
 
@@ -144,10 +209,75 @@ describe("BookDetail", () => {
       meMutate: vi.fn(),
       logout: vi.fn(),
     });
-    render(<BookDetail book={DummyBooks[0]} onUpdateFavorite={() => {}} />);
+    render(
+      <BookDetail
+        book={DummyBooks[0]}
+        reviews={[]}
+        onUpdateFavorite={() => {}}
+        onDeleteReview={() => {}}
+      />,
+    );
     const reviewButton = screen.getByRole("link", { name: "レビューを書く" });
 
     // Assert
     expect(reviewButton).toHaveAttribute("href", "/reviews/create?bookId=1");
+  });
+
+  test("自身が投稿したレビューのみ削除ボタンが表示される", () => {
+    // Arrange
+    vi.mocked(useAuth).mockReturnValue({
+      me: users[0],
+      isLoading: false,
+      isMutating: false,
+      meMutate: vi.fn(),
+      logout: vi.fn(),
+    });
+    render(
+      <BookDetail
+        book={DummyBooks[0]}
+        reviews={DummyReviews}
+        onUpdateFavorite={() => {}}
+        onDeleteReview={() => {}}
+      />,
+    );
+    const myReviewDeleteButton = screen.getByTestId(
+      "reviews-list-delete-button-1",
+    );
+    const othersReviewDeleteButton = screen.queryByTestId(
+      "reviews-list-delete-button-3",
+    );
+
+    // Assert
+    expect(myReviewDeleteButton).toBeInTheDocument();
+    expect(othersReviewDeleteButton).not.toBeInTheDocument();
+  });
+
+  test("削除ボタンが正しく挙動する", async () => {
+    // Arrange
+    vi.mocked(useAuth).mockReturnValue({
+      me: users[0],
+      isLoading: false,
+      isMutating: false,
+      meMutate: vi.fn(),
+      logout: vi.fn(),
+    });
+    const deleteReviewMock = vi.fn();
+    render(
+      <BookDetail
+        book={DummyBooks[0]}
+        reviews={DummyReviews}
+        onUpdateFavorite={() => {}}
+        onDeleteReview={deleteReviewMock}
+      />,
+    );
+    const myReviewDeleteButton = screen.getByTestId(
+      "reviews-list-delete-button-1",
+    );
+
+    // Act
+    await userEvent.click(myReviewDeleteButton);
+
+    // Assert
+    expect(deleteReviewMock).toHaveBeenCalledWith(DummyReviews[0]);
   });
 });

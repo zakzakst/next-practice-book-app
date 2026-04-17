@@ -4,17 +4,27 @@ import { useCallback } from "react";
 
 import Link from "next/link";
 
+import { ReviewsList } from "../../reviews/ReviewsList";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { FrontBook } from "@/types/api/books";
+import { FrontReview } from "@/types/api/reviews";
 
 type Props = {
   book: FrontBook;
   onUpdateFavorite: (book: FrontBook) => void;
+  // TODO: 考える。APIがごちゃつきそうなので書籍詳細データとレビューデータのAPIを分けた、一旦バケツリレーで対応するが、APIの設計を見直す必要もあるかも
+  reviews: FrontReview[];
+  onDeleteReview: (review: FrontReview) => void;
 };
 
-export const BookDetail = ({ book, onUpdateFavorite }: Props) => {
+export const BookDetail = ({
+  book,
+  onUpdateFavorite,
+  reviews,
+  onDeleteReview,
+}: Props) => {
   const { me } = useAuth();
 
   const handleUpdateFavorite = useCallback(
@@ -71,9 +81,14 @@ export const BookDetail = ({ book, onUpdateFavorite }: Props) => {
           <p>レビュー数：{book.reviews.count}</p>
         </div>
         <Separator className="my-6" />
-        <div>
+        <div className="grid grid-cols-1 gap-2">
           <h2 className="text-xl font-bold">あらすじ・内容</h2>
           <p>{book.description}</p>
+        </div>
+        <Separator className="my-6" />
+        <div className="grid grid-cols-1 gap-2">
+          <h2 className="text-xl font-bold">レビュー</h2>
+          <ReviewsList items={reviews} onDeleteReview={onDeleteReview} />
         </div>
       </div>
     </div>
