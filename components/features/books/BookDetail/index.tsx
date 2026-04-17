@@ -35,6 +35,7 @@ export const BookDetail = ({ book, onUpdateFavorite }: Props) => {
               ? `${book.title}の書影`
               : "登録された書影がありません"
           }
+          loading="lazy"
         />
       </div>
       <div>
@@ -44,7 +45,10 @@ export const BookDetail = ({ book, onUpdateFavorite }: Props) => {
           <div className="flex items-center gap-2">
             <p>お気に入り登録した人数：{book.favorite.count}</p>
             {me && (
-              <Button onClick={() => handleUpdateFavorite(book)}>
+              <Button
+                onClick={() => handleUpdateFavorite(book)}
+                data-testid="book-detail-favorite-button"
+              >
                 {book.favorite.state ? "お気に入り解除" : "お気に入り登録"}
               </Button>
             )}

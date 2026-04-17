@@ -1,9 +1,14 @@
 import { BookDetail } from "@/components/features/books/BookDetail";
-import { Book } from "@/types/domain/book";
+import { useAuth } from "@/contexts/AuthContext";
+import { users } from "@/dummy-db/user";
+import { FrontBook } from "@/types/api/books";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, test, vi } from "vitest";
 
-const DummyBooks: Book[] = [
+vi.mock("@/contexts/AuthContext");
+
+const DummyBooks: FrontBook[] = [
   {
     id: 1,
     title: "深夜特急",
@@ -13,6 +18,10 @@ const DummyBooks: Book[] = [
     // thumbnail: "https://placehold.jp/800x450.png?text=No+Image",
     createdAt: "2024-01-15T10:00:00.000Z",
     updatedAt: "2024-01-15T10:00:00.000Z",
+    favorite: {
+      count: 0,
+      state: false,
+    },
   },
   {
     id: 2,
@@ -23,13 +32,24 @@ const DummyBooks: Book[] = [
     thumbnail: "https://placehold.jp/800x450.png?text=コンビニ人間の書影",
     createdAt: "2024-02-01T12:30:00.000Z",
     updatedAt: "2024-02-01T12:30:00.000Z",
+    favorite: {
+      count: 8,
+      state: true,
+    },
   },
 ];
 
 describe("BookDetail", () => {
   test("渡されたデータに対応した内容が表示される", () => {
     // Arrange
-    render(<BookDetail book={DummyBooks[1]} />);
+    vi.mocked(useAuth).mockReturnValue({
+      me: null,
+      isLoading: false,
+      isMutating: false,
+      meMutate: vi.fn(),
+      logout: vi.fn(),
+    });
+    render(<BookDetail book={DummyBooks[1]} onUpdateFavorite={() => {}} />);
     const thumbnail = screen.getByRole("img");
 
     // Assert
@@ -45,11 +65,19 @@ describe("BookDetail", () => {
       "https://placehold.jp/800x450.png?text=コンビニ人間の書影",
     );
     expect(thumbnail).toHaveAttribute("alt", "コンビニ人間の書影");
+    expect(screen.getByText("お気に入り登録した人数：8")).toBeInTheDocument();
   });
 
   test("書影なしのデータの場合、書影なしの画像が表示される", () => {
     // Arrange
-    render(<BookDetail book={DummyBooks[0]} />);
+    vi.mocked(useAuth).mockReturnValue({
+      me: null,
+      isLoading: false,
+      isMutating: false,
+      meMutate: vi.fn(),
+      logout: vi.fn(),
+    });
+    render(<BookDetail book={DummyBooks[0]} onUpdateFavorite={() => {}} />);
     const thumbnail = screen.getByRole("img");
 
     // Assert
@@ -58,5 +86,43 @@ describe("BookDetail", () => {
       "https://placehold.jp/800x450.png?text=No+Image",
     );
     expect(thumbnail).toHaveAttribute("alt", "登録された書影がありません");
+  });
+
+  test("未ログインの場合、お気に入りボタンが表示されない", () => {
+    // Arrange
+    vi.mocked(useAuth).mockReturnValue({
+      me: null,
+      isLoading: false,
+      isMutating: false,
+      meMutate: vi.fn(),
+      logout: vi.fn(),
+    });
+    render(<BookDetail book={DummyBooks[0]} onUpdateFavorite={() => {}} />);
+    const favoriteButton = screen.queryByTestId("book-detail-favorite-button");
+
+    // Assert
+    expect(favoriteButton).not.toBeInTheDocument();
+  });
+
+  test("お気に入りボタンが正しく挙動する", async () => {
+    // Arrange
+    vi.mocked(useAuth).mockReturnValue({
+      me: users[0],
+      isLoading: false,
+      isMutating: false,
+      meMutate: vi.fn(),
+      logout: vi.fn(),
+    });
+    const updateFavoriteMock = vi.fn();
+    render(
+      <BookDetail book={DummyBooks[0]} onUpdateFavorite={updateFavoriteMock} />,
+    );
+    const favoriteButton = screen.getByTestId("book-detail-favorite-button");
+
+    // Act
+    await userEvent.click(favoriteButton);
+
+    // Assert
+    expect(updateFavoriteMock).toHaveBeenCalledWith(DummyBooks[0]);
   });
 });

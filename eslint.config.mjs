@@ -8,6 +8,12 @@ const eslintConfig = defineConfig([
   ...nextTs,
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
   ...storybook.configs["flat/recommended"],
+  {
+    rules: {
+      // TODO: テンプレートのほうにも反映
+      "@next/next/no-img-element": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;
