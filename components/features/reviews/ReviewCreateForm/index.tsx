@@ -135,6 +135,7 @@ export const ReviewCreateForm = ({ values, onSubmit, isLoading }: Props) => {
           <Button
             onClick={handleSubmit(submit)}
             disabled={isLoading || !isValid}
+            data-testid="review-create-form-submit-button"
           >
             登録
           </Button>
