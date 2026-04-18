@@ -44,6 +44,7 @@ export const Default: Story = {
       },
       reviews: {
         count: 0,
+        state: false,
       },
     },
     reviews: [
@@ -95,6 +96,7 @@ export const NoImage: Story = {
       },
       reviews: {
         count: 0,
+        state: false,
       },
     },
     reviews: [],

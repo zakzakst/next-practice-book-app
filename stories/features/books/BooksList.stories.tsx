@@ -13,6 +13,7 @@ const frontBooks = books.map((b) => ({
   },
   reviews: {
     count: 0,
+    state: false,
   },
 }));
 

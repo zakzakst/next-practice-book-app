@@ -11,6 +11,7 @@ type Error = {
   error: string;
 };
 
+// NOTE: 編集ページへの遷移の関係で一旦使わない（API設計が適切かは考える必要がある）
 export const PUT = async (
   request: NextRequest,
   context: RouteContext<"/api/reviews/[id]">,

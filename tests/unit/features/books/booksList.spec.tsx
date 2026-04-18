@@ -24,6 +24,7 @@ const DummyBooks: FrontBook[] = [
     },
     reviews: {
       count: 0,
+      state: false,
     },
   },
   {
@@ -41,6 +42,7 @@ const DummyBooks: FrontBook[] = [
     },
     reviews: {
       count: 6,
+      state: true,
     },
   },
 ];

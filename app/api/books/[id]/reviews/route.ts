@@ -6,6 +6,8 @@ import { users } from "@/dummy-db/user";
 import { apiDelay } from "@/lib/api";
 import { getJwtPayload } from "@/lib/jwt";
 import {
+  CreateReviewRequest,
+  CreateReviewResponse,
   FindAllReviewsByBookIdResponse,
   FrontReview,
   UpdateReviewRequest,
@@ -64,7 +66,7 @@ export const GET = async (
 export const POST = async (
   request: NextRequest,
   context: RouteContext<"/api/books/[id]/reviews">,
-): Promise<NextResponse<UpdateReviewResponse | Error>> => {
+): Promise<NextResponse<CreateReviewResponse | Error>> => {
   await apiDelay();
 
   try {
@@ -99,7 +101,7 @@ export const POST = async (
       );
     }
 
-    const params: UpdateReviewRequest = await request.json();
+    const params: CreateReviewRequest = await request.json();
     const newReview = {
       id: reviews.length + 1,
       bookId: book.id,
@@ -108,6 +110,73 @@ export const POST = async (
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
+
+    reviews.push(newReview);
+
+    return NextResponse.json({
+      ...newReview,
+      user: {
+        ...user,
+        // TODO: 調べる。ユーザーが出る度にpassword消す処理するの不便
+        password: undefined,
+      },
+    });
+  } catch {
+    return NextResponse.json(
+      { error: "サーバーのエラーが発生しました" },
+      { status: 500 },
+    );
+  }
+};
+
+export const PUT = async (
+  request: NextRequest,
+  context: RouteContext<"/api/books/[id]/reviews">,
+): Promise<NextResponse<UpdateReviewResponse | Error>> => {
+  await apiDelay();
+
+  try {
+    // ログインユーザーか確認
+    const jwtPayload = await getJwtPayload();
+    const user = users.find((u) => u.id === jwtPayload?.id);
+    if (!user) {
+      return NextResponse.json(
+        { error: "処理の実行権限がありません" },
+        { status: 403 },
+      );
+    }
+
+    // 書籍が存在するか確認
+    const { id } = await context.params;
+    const book = books.find((b) => b.id === Number(id));
+    if (!book) {
+      return NextResponse.json(
+        { error: "指定された書籍が見つかりません" },
+        { status: 404 },
+      );
+    }
+
+    // 自身が登録したレビューがあるか確認
+    const targetReview = reviews.find(
+      (r) => r.bookId === book.id && r.userId === user.id,
+    );
+    if (!targetReview) {
+      return NextResponse.json(
+        { error: "この書籍へのレビューは登録されていません" },
+        { status: 404 },
+      );
+    }
+
+    const params: UpdateReviewRequest = await request.json();
+    const newReview = {
+      ...targetReview,
+      ...params,
+      updatedAt: new Date().toISOString(),
+    };
+
+    const targetReviewIndex = reviews.findIndex((r) => r === targetReview);
+
+    reviews[targetReviewIndex] = newReview;
 
     return NextResponse.json({
       ...newReview,
