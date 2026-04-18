@@ -67,7 +67,10 @@ export const BookDetail = ({
               <div>
                 <Button className="w-full" asChild>
                   {/* TODO: 考える。レビュー編集ページのURL自信ない。。（bookIdではなくreview自体のidを指定するほうが適切ではないか？ ※/reviews/edit/[reviewId]的な）考えまとまらないので一旦作ってみる */}
-                  <Link href={`/reviews/edit?bookId=${book.id}`}>
+                  <Link
+                    href={`/reviews/edit?bookId=${book.id}`}
+                    data-testid="book-detail-edit-review-button"
+                  >
                     レビューを編集
                   </Link>
                 </Button>
@@ -75,7 +78,10 @@ export const BookDetail = ({
             ) : (
               <div>
                 <Button className="w-full" asChild>
-                  <Link href={`/reviews/create?bookId=${book.id}`}>
+                  <Link
+                    href={`/reviews/create?bookId=${book.id}`}
+                    data-testid="book-detail-create-review-button"
+                  >
                     レビューを書く
                   </Link>
                 </Button>
