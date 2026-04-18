@@ -12,7 +12,9 @@ import {
   usePostBookFavorite,
 } from "@/hooks/useBookFavorite";
 import { useFindOneBook } from "@/hooks/useBooks";
+import { useFindAllReviewsByBookId, useRemoveReview } from "@/hooks/useReviews";
 import { FrontBook } from "@/types/api/books";
+import { FrontReview } from "@/types/api/reviews";
 import { toast } from "sonner";
 
 type Props = {
@@ -21,6 +23,10 @@ type Props = {
 
 export const PageContent = ({ id }: Props) => {
   const { data, isLoading, error, mutate } = useFindOneBook(id);
+  // TODO: 考える。複数APIを走らせるとエラーやロードのハンドリング複雑になる、一旦そのあたり無視して作成する
+  const { data: reviewsData, mutate: reviewsMutate } =
+    useFindAllReviewsByBookId(id);
+  const { trigger, isMutating } = useRemoveReview();
   const {
     trigger: postTrigger,
     isMutating: isMutatingPost,
@@ -58,8 +64,19 @@ export const PageContent = ({ id }: Props) => {
     [deleteTrigger, postTrigger, mutate],
   );
 
+  const handleDeleteReview = useCallback(
+    async (review: FrontReview) => {
+      await trigger({ id: review.id });
+      // TODO: APIのレスポンスを見直してエラーハンドリング実装
+      toast("レビュー削除しました");
+      reviewsMutate();
+    },
+    [trigger, toast, reviewsMutate],
+  );
+
   if (isLoading) return <div>データ取得中...</div>;
   if (isMutatingPost || isMutatingDelete) return <div>お気に入り更新中...</div>;
+  if (isMutating) return <div>レビュー削除中...</div>;
   if (error || errorPost || errorDelete) return <div>エラーが発生しました</div>;
   if (!data) return <div>書籍が見つかりません</div>;
 
@@ -72,7 +89,12 @@ export const PageContent = ({ id }: Props) => {
           </Button>
         </div>
       )}
-      <BookDetail book={data} onUpdateFavorite={handleUpdateFavorite} />
+      <BookDetail
+        book={data}
+        reviews={reviewsData?.items || []}
+        onUpdateFavorite={handleUpdateFavorite}
+        onDeleteReview={handleDeleteReview}
+      />
     </div>
   );
 };
