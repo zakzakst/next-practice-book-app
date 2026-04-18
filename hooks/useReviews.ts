@@ -25,9 +25,9 @@ export const useCreateReview = (id: FrontBook["id"]) => {
 };
 
 // Update
-export const useUpdateReview = (id: FrontReview["id"]) => {
+export const useUpdateReview = (id: FrontBook["id"]) => {
   return useSWRMutation(
-    getApiPath(`/reviews/${id}`),
+    getApiPath(`/books/${id}/reviews`),
     updateFetcher<UpdateReviewRequest, UpdateReviewResponse>,
   );
 };

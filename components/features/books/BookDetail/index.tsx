@@ -63,13 +63,24 @@ export const BookDetail = ({
                 {book.favorite.state ? "お気に入り解除" : "お気に入り登録"}
               </Button>
             </div>
-            <div>
-              <Button className="w-full" asChild>
-                <Link href={`/reviews/create?bookId=${book.id}`}>
-                  レビューを書く
-                </Link>
-              </Button>
-            </div>
+            {book.reviews.state ? (
+              <div>
+                <Button className="w-full" asChild>
+                  {/* TODO: 考える。レビュー編集ページのURL自信ない。。（bookIdではなくreview自体のidを指定するほうが適切ではないか？ ※/reviews/edit/[reviewId]的な）考えまとまらないので一旦作ってみる */}
+                  <Link href={`/reviews/edit?bookId=${book.id}`}>
+                    レビューを編集
+                  </Link>
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <Button className="w-full" asChild>
+                  <Link href={`/reviews/create?bookId=${book.id}`}>
+                    レビューを書く
+                  </Link>
+                </Button>
+              </div>
+            )}
           </>
         )}
       </div>

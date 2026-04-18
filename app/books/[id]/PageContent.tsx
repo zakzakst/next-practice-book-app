@@ -71,7 +71,7 @@ export const PageContent = ({ id }: Props) => {
       toast("レビュー削除しました");
       reviewsMutate();
     },
-    [trigger, toast, reviewsMutate],
+    [trigger, reviewsMutate],
   );
 
   if (isLoading) return <div>データ取得中...</div>;

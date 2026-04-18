@@ -10,6 +10,7 @@ export type FrontBook = Book & {
   };
   reviews: {
     count: number;
+    state: boolean;
   };
 };
 

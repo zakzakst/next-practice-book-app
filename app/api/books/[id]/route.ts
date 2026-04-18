@@ -43,6 +43,9 @@ export const GET = async (
       (f) => f.bookId === book.id && f.userId === user?.id,
     );
     const bookReviews = reviews.filter((r) => r.bookId === book.id);
+    const userBookReview = reviews.find(
+      (r) => r.bookId === book.id && r.userId === user?.id,
+    );
 
     return NextResponse.json({
       ...book,
@@ -52,6 +55,7 @@ export const GET = async (
       },
       reviews: {
         count: bookReviews.length,
+        state: userBookReview ? true : false,
       },
     });
   } catch {
@@ -105,6 +109,9 @@ export const PUT = async (
       (f) => f.bookId === book.id && f.userId === user?.id,
     );
     const bookReviews = reviews.filter((r) => r.bookId === book.id);
+    const userBookReview = reviews.find(
+      (r) => r.bookId === book.id && r.userId === user?.id,
+    );
 
     return NextResponse.json({
       ...updatedBook,
@@ -114,6 +121,7 @@ export const PUT = async (
       },
       reviews: {
         count: bookReviews.length,
+        state: userBookReview ? true : false,
       },
     });
   } catch {

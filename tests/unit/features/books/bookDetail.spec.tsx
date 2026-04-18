@@ -25,6 +25,7 @@ const DummyBooks: FrontBook[] = [
     },
     reviews: {
       count: 0,
+      state: false,
     },
   },
   {
@@ -42,6 +43,7 @@ const DummyBooks: FrontBook[] = [
     },
     reviews: {
       count: 6,
+      state: true,
     },
   },
 ];
@@ -200,7 +202,7 @@ describe("BookDetail", () => {
     expect(updateFavoriteMock).toHaveBeenCalledWith(DummyBooks[0]);
   });
 
-  test("レビューボタンのリンクが正しく設定される", () => {
+  test("レビューを書くボタンのリンクが正しく設定される", () => {
     // Arrange
     vi.mocked(useAuth).mockReturnValue({
       me: users[0],
@@ -223,7 +225,30 @@ describe("BookDetail", () => {
     expect(reviewButton).toHaveAttribute("href", "/reviews/create?bookId=1");
   });
 
-  test("自身が投稿したレビューのみ削除ボタンが表示される", () => {
+  test("レビュー登録済の書籍の場合、レビューを編集ボタンが表示される", () => {
+    // Arrange
+    vi.mocked(useAuth).mockReturnValue({
+      me: users[0],
+      isLoading: false,
+      isMutating: false,
+      meMutate: vi.fn(),
+      logout: vi.fn(),
+    });
+    render(
+      <BookDetail
+        book={DummyBooks[1]}
+        reviews={[]}
+        onUpdateFavorite={() => {}}
+        onDeleteReview={() => {}}
+      />,
+    );
+    const reviewButton = screen.getByRole("link", { name: "レビューを編集" });
+
+    // Assert
+    expect(reviewButton).toHaveAttribute("href", "/reviews/edit?bookId=2");
+  });
+
+  test("自身が登録したレビューのみ削除ボタンが表示される", () => {
     // Arrange
     vi.mocked(useAuth).mockReturnValue({
       me: users[0],

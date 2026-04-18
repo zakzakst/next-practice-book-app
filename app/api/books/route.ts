@@ -49,6 +49,9 @@ export const GET = async (
         (f) => f.bookId === b.id && f.userId === user?.id,
       );
       const bookReviews = reviews.filter((r) => r.bookId === b.id);
+      const userBookReview = reviews.find(
+        (r) => r.bookId === b.id && r.userId === user?.id,
+      );
       return {
         ...b,
         favorite: {
@@ -57,6 +60,7 @@ export const GET = async (
         },
         reviews: {
           count: bookReviews.length,
+          state: userBookReview ? true : false,
         },
       };
     });
