@@ -57,8 +57,10 @@ describe("Navbar", () => {
     render(<Navbar />);
 
     const logoutButton = screen.getByRole("button", { name: "ログアウト" });
+    const mypageLink = screen.getByRole("link", { name: "マイページ" });
     expect(screen.getByText("TOP")).toBeInTheDocument();
     expect(logoutButton).toBeInTheDocument();
+    expect(mypageLink).toHaveAttribute("href", "/mypage");
 
     await fireEvent.click(logoutButton);
     expect(logoutMock).toHaveBeenCalled();
