@@ -23,7 +23,8 @@ export const ReviewsList = ({ items, onDeleteReview }: Props) => {
     [onDeleteReview],
   );
 
-  if (!items.length) return <div>レビューはありません</div>;
+  if (!items.length)
+    return <div className="text-center">レビューはありません</div>;
 
   return (
     <ul className="grid grid-cols-1 gap-4">

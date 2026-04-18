@@ -32,7 +32,12 @@ export const Navbar = ({ className }: Props) => {
             {me ? (
               <>
                 <span className="leading-none">{me.name || "名前未設定"}</span>
-                <Button onClick={logout}>ログアウト</Button>
+                <Button onClick={logout} variant="ghost">
+                  ログアウト
+                </Button>
+                <Button asChild>
+                  <Link href="/mypage">マイページ</Link>
+                </Button>
               </>
             ) : (
               <>
