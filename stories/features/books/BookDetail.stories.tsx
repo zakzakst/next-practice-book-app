@@ -8,7 +8,6 @@ import { fn } from "storybook/test";
 const meta = {
   title: "Features/Books/BookDetail",
   component: BookDetail,
-  // TODO: テンプレートのほうにも反映（experimental削除）
   tags: ["autodocs"],
   args: {
     onUpdateFavorite: fn(),

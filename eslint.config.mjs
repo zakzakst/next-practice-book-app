@@ -10,7 +10,6 @@ const eslintConfig = defineConfig([
   ...storybook.configs["flat/recommended"],
   {
     rules: {
-      // TODO: テンプレートのほうにも反映
       "@next/next/no-img-element": "off",
     },
   },

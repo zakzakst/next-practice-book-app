@@ -8,7 +8,6 @@ test("ログインに成功したらトップページに遷移する", async ({
   const passwordInput = page.getByRole("textbox", { name: "パスワード" });
   const submitButton = page.getByRole("button", { name: "ログイン" });
 
-  // TODO: テンプレートのほうにも反映
   // NOTE: 基本的には「fill」を利用したほうがいいとのことだが、バリデーションが通らなかったので、「pressSequentially」を利用
   // https://playwright.dev/docs/input#type-characters
   await emailInput.pressSequentially(users[0].email);
