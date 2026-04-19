@@ -11,6 +11,15 @@ export const apiDelay = (
   return new Promise((resolve) => setTimeout(resolve, delay));
 };
 
+const handleFetchResponse = async (res: Response) => {
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    const errorMessage = errorData?.error?.message || "エラーが発生しました";
+    throw new Error(errorMessage);
+  }
+  return res.json();
+};
+
 // Create
 export const createFetcher = <CreateRequest, CreateResponse>(
   url: string,
@@ -20,7 +29,7 @@ export const createFetcher = <CreateRequest, CreateResponse>(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(arg),
-  }).then((res) => res.json() as Promise<CreateResponse>);
+  }).then(handleFetchResponse) as Promise<CreateResponse>;
 };
 
 // FindAll
@@ -40,14 +49,12 @@ export const findAllFetcher = <FindAllResponse, FindAllParams = undefined>({
   const stringifiedParams = normalizedParams.toString();
   const formattedUrl =
     stringifiedParams.length > 0 ? `${url}?${stringifiedParams}` : url;
-  return fetch(formattedUrl).then(
-    (res) => res.json() as Promise<FindAllResponse>,
-  );
+  return fetch(formattedUrl).then(handleFetchResponse) as Promise<FindAllResponse>;
 };
 
 // FindOne
 export const findOneFetcher = <FindOneResponse>(url: string) => {
-  return fetch(url).then((res) => res.json() as Promise<FindOneResponse>);
+  return fetch(url).then(handleFetchResponse) as Promise<FindOneResponse>;
 };
 
 // Update
@@ -59,12 +66,12 @@ export const updateFetcher = <UpdateRequest, UpdateResponse>(
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(arg),
-  }).then((res) => res.json() as Promise<UpdateResponse>);
+  }).then(handleFetchResponse) as Promise<UpdateResponse>;
 };
 
 // Remove
 export const removeFetcher = (url: string) => {
   return fetch(url, {
     method: "DELETE",
-  }).then((res) => res.json());
+  }).then(handleFetchResponse);
 };

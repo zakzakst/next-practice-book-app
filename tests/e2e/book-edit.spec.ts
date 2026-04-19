@@ -4,6 +4,11 @@ import { API_MOCK_DEFAULT_DELAY, apiDelay } from "@/lib/api";
 import { UserRole } from "@/types/domain/user";
 import { Page, expect, test } from "@playwright/test";
 
+test.beforeEach(async ({ request }) => {
+  // テストの実行前にデータベース（インメモリ配列）を初期化する
+  await request.post("http://localhost:3000/api/test/reset-db");
+});
+
 const login = async (page: Page, role: UserRole) => {
   await page.goto("http://localhost:3000/login");
   const emailInput = page.getByRole("textbox", { name: "メールアドレス" });
@@ -90,11 +95,8 @@ test("admin権限でログインした場合、書籍データ更新ページで
   await expect(page.getByText("更新著者名")).toBeVisible();
   await expect(page.getByText("更新あらすじ・内容")).toBeVisible();
 
-  // TODO: ここの書き方調べる（jestのafterAll的な書き方ある？）
   // 次のテストのためにログアウトして終わる
   await logout(page);
-
-  // TODO: データベース更新するテストの後にデータベースを初期化する方法のセオリーが分からない。調べる
 });
 
 test("user権限でログインした場合、書籍データ更新ページへのリンクが表示されない", async ({
